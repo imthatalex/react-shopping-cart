@@ -1,0 +1,23 @@
+.container {
+  border: 1px solid #000;
+  margin: 40px auto;
+}
+
+.row {
+  border: 1px solid red;
+  padding: 30px;
+}
+
+.col {
+  border: 1px solid blue;
+  padding: 20px;
+}
+
+.color-example {
+  border-radius: 50em;
+  border: none;
+  padding: 5px;
+  height: 5px;
+  width: 5px;
+  margin: 0 10px;
+}
