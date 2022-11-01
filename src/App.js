@@ -34,7 +34,15 @@ export default function ProductGallery({products}){
 // cannot mutate original arrays : pure programming
 function ProductImages({products}) {  
   const [cart, setCart] = useState([]);
+
   const [cartQuantity, setCartQuantity] = useState(0);
+  
+
+  const [productQuantity, setProductQuantity] = useState(products);
+
+
+
+  // set state for product quantity and implement increment/decrement handler functions
 
   // aids in rendering
   const pureProductImages = [];
@@ -43,13 +51,17 @@ function ProductImages({products}) {
       pureProductImages.push(
         <ProductImage 
           key={product.id} 
+          id={product.id}
           image={product.image} 
           name={product.name} 
           colors={product.colors} 
           cart={cart} 
           setCart={setCart} 
           cartQuantity={cartQuantity} 
-          setCartQuantity={setCartQuantity}/>
+          setCartQuantity={setCartQuantity}
+          products={productQuantity}
+          setProductQuantity={setProductQuantity}
+          />
       )
   })
 
@@ -87,21 +99,44 @@ function Navbar({cartQuantity, cart, pureProductImages}){
 }
 
 
-function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCartQuantity}){
+function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCartQuantity, products, setProductQuantity}){
 
-  
+  const [disableButton, setDisableButton] = useState(false);
+
 
   function addToCart(){
+    let pureQuantity = cartQuantity;
+
+    // update products quantity
+
+    setProductQuantity(...products,
+      {quantity: pureQuantity + 1})
+
+  
+    
     cart.push(name);
     setCart(cart);
-    console.log(cart);
-    setCartQuantity(cartQuantity + 1);
+    setCartQuantity(pureQuantity + 1);
+
+    console.log(cartQuantity, pureQuantity, products);
+
+    if(pureQuantity > 0) {
+      setDisableButton(true);
+    }
   }
 
   function removeFromCart(){
-      cart.pop(name);
-      setCart(cart);
-      console.log(cart);
+  
+
+      // pop method : removing last element from array
+      
+    
+      if(cartQuantity === 0){
+      // filter is iterating through cart : its asking : if element value is not equal to name value, return value, since the value is equal it does not return 
+      setCart(cart.filter(element => element !== name));
+      }
+
+    
       if(cartQuantity !== 0){
         setCartQuantity(cartQuantity - 1);
       }
@@ -121,7 +156,7 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
         </div>
         <div className="row">
           <div className="col">
-            <button onClick={addToCart}>Add to Cart</button>  
+            <button disabled={disableButton} onClick={addToCart}>Add to Cart</button>  
           </div>
           <div className="col">
             <button onClick={removeFromCart}>Remove from Cart</button>  
@@ -158,10 +193,21 @@ function ProductColors({colors}){
 
     const cartItems = [];
 
-    function renderCart(cart){
-      for(let i = 0; i < cart.length; i++){
-        cartItems.push(cart[i]);
-      }
+    // forLoop : if cart [0] (first entry) is equal to purePI[0] (first entry = 'basketball')
+    function renderCart(pureProductImages){
+
+    // using forEach removes the limitation forLoop had on iterating through the fixed length of pureProductImages
+    // now it simply tests the condition for all elements in the array regardless of length
+      pureProductImages.forEach((item) => {
+        for(let i = 0; i < cart.length; i++){
+          if(cart[i] === item.props.name){
+            cartItems.push(item);
+          }
+        }
+      })
+          
+    
+
     
       return (
         <div>{cartItems}</div>
@@ -176,7 +222,7 @@ function ProductColors({colors}){
           <DrawerContent>
             <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
             <DrawerBody>
-              {renderCart(cart)}
+              {renderCart(pureProductImages)}
             </DrawerBody>
           </DrawerContent>
         </Drawer>
@@ -213,4 +259,12 @@ function ProductColors({colors}){
       </>
     )
   }
+
+
+
+  // Remove from Cart Drawer
+  // Product Modal Details
+  // Cart Drawer Quantity Option
+
+
 

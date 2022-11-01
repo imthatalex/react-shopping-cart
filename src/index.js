@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react'
 
 
+
+// add quantity
 const productList = [
-  {id: 0, name: 'Basketball', colors: ['orange', 'blue', 'black'], image: 'Basketball Image'},
-  {id: 1, name: 'Football', colors: ['orange', 'blue', 'black'], image: 'Football Image'},
-  {id: 2, name: 'Baseball', colors: ['orange', 'blue', 'black'], image: 'Baseball Image'},
+  {id: 0, name: 'Basketball', colors: ['orange', 'blue', 'black'], image: 'Basketball Image', quantity: 0},
+  {id: 1, name: 'Football', colors: ['orange', 'blue', 'black'], image: 'Football Image', quantity: 0},
+  {id: 2, name: 'Baseball', colors: ['orange', 'blue', 'black'], image: 'Baseball Image', quantity: 0},
 ]
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
