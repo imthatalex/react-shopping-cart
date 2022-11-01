@@ -1,15 +1,13 @@
-
 import './App.css';
 import {useState} from 'react';
-
 import {
+  useDisclosure,
   Button,
   Drawer,
   DrawerOverlay,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-  useDisclosure,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -20,61 +18,55 @@ import {
 } from '@chakra-ui/react'
 
 
+  // Cart Drawer 
 
-export default function ProductGallery({products}){
-    return(
-      <div className="container">
-        <div className="row">
-          <ProductImages products={products}/>
-        </div>
-      </div>        
-    )
-}
+  function CartDrawer({cart, pureProductDetails}) {
+    // Controls
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
-// cannot mutate original arrays : pure programming
-function ProductImages({products}) {  
-  const [cart, setCart] = useState([]);
+    // passes Product Components in Cart to an empty array
+    const productsInCart = [];
 
-  const [cartQuantity, setCartQuantity] = useState(0);
-  
+    // Limited : forLoop : if cart [0] (first entry) is equal to purePI[0] : (first entry = 'basketball')
+    function renderCart(pureProductDetails){
 
-  const [productQuantity, setProductQuantity] = useState(products);
+    // using forEach removes the limitation forLoop had on iterating through the fixed length of pureProductDetails
+    // now it simply tests the condition for all elements in the array regardless of length
 
-
-
-  // set state for product quantity and implement increment/decrement handler functions
-
-  // aids in rendering
-  const pureProductImages = [];
-
-  products.forEach((product) => {
-      pureProductImages.push(
-        <ProductImage 
-          key={product.id} 
-          id={product.id}
-          image={product.image} 
-          name={product.name} 
-          colors={product.colors} 
-          cart={cart} 
-          setCart={setCart} 
-          cartQuantity={cartQuantity} 
-          setCartQuantity={setCartQuantity}
-          products={productQuantity}
-          setProductQuantity={setProductQuantity}
-          />
+      pureProductDetails.forEach((item) => {
+        for(let i = 0; i < cart.length; i++){
+          if(cart[i] === item.props.name){
+            productsInCart.push(item);
+          }
+        }
+      })
+    
+      // renders Components in Cart
+      return (
+        <div>{productsInCart}</div>
       )
-  })
+    }
+  
+    return (
+      <>
+        <Button onClick={onOpen}>View Cart</Button>
+        <Drawer placement='right' onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+            <DrawerBody>
+              {renderCart(pureProductDetails)}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      </>
+    )
+  }
 
-  return (
-    <>
-      <Navbar cart={cart} pureProductImages={pureProductImages} cartQuantity={cartQuantity}/>
-      {pureProductImages}
-    </>
-  )
 
-}
+  // Navbar
 
-function Navbar({cartQuantity, cart, pureProductImages}){
+function Navbar({cart, pureProductDetails, cartQuantity}){
   return (
     <div className="container">
       <div className="row">
@@ -88,7 +80,7 @@ function Navbar({cartQuantity, cart, pureProductImages}){
           <div></div>
         </div>
         <div className="col">
-          <CartDrawer cart={cart} pureProductImages={pureProductImages}/>
+          <CartDrawer cart={cart} pureProductDetails={pureProductDetails}/>
         </div>
         <div className="col">
           <div>Cart: {cartQuantity}</div>
@@ -99,30 +91,63 @@ function Navbar({cartQuantity, cart, pureProductImages}){
 }
 
 
-function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCartQuantity, products, setProductQuantity}){
+// Colors : Modal : Details : Add to Cart : Remove from Cart : Increment/Decrement Quantity
 
-  const [disableButton, setDisableButton] = useState(false);
+function ProductColors({colors}){
+  let exampleColors = [];
+
+  for(let i = 0; i < colors.length; i++){
+    exampleColors.push(<div key={colors[i]} style={{backgroundColor: colors[i]}} className="color-example"/>);
+  }
+
+  return (
+    <>
+      {exampleColors}
+    </>
+  )
+}
+
+
+ // Modal Example
+
+ function ProductModal() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+      <Button onClick={onOpen}>View Product</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            hello
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant='ghost'>Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
+
+function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCartQuantity}){
+
+
 
 
   function addToCart(){
-    let pureQuantity = cartQuantity;
-
     // update products quantity
-
-    setProductQuantity(...products,
-      {quantity: pureQuantity + 1})
-
-  
-    
     cart.push(name);
     setCart(cart);
-    setCartQuantity(pureQuantity + 1);
-
-    console.log(cartQuantity, pureQuantity, products);
-
-    if(pureQuantity > 0) {
-      setDisableButton(true);
-    }
+    setCartQuantity(cartQuantity + 1);
   }
 
   function removeFromCart(){
@@ -131,10 +156,10 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
       // pop method : removing last element from array
       
     
-      if(cartQuantity === 0){
+     
       // filter is iterating through cart : its asking : if element value is not equal to name value, return value, since the value is equal it does not return 
       setCart(cart.filter(element => element !== name));
-      }
+      
 
     
       if(cartQuantity !== 0){
@@ -156,7 +181,7 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
         </div>
         <div className="row">
           <div className="col">
-            <button disabled={disableButton} onClick={addToCart}>Add to Cart</button>  
+            <button onClick={addToCart}>Add to Cart</button>  
           </div>
           <div className="col">
             <button onClick={removeFromCart}>Remove from Cart</button>  
@@ -170,101 +195,61 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
   )
 }
 
-function ProductColors({colors}){
-    let exampleColors = [];
-
-    for(let i = 0; i < colors.length; i++){
-      exampleColors.push(<div key={colors[i]} style={{backgroundColor: colors[i]}} className="color-example"/>);
-    }
-
-    return (
-      <>
-        {exampleColors}
-      </>
-    )
-  }
 
 
 
-  // Chakra Drawer
+function ProductDetails({products}) { 
+  // adds name of product to empty array to later cross check name with product name to render in cart
+  const [cart, setCart] = useState([]);
 
-  function CartDrawer({cart, pureProductImages}) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+  // displays number of products in cart
+  const [cartQuantity, setCartQuantity] = useState(0);
+  
 
-    const cartItems = [];
+  const [productQuantity, setProductQuantity] = useState(products);
 
-    // forLoop : if cart [0] (first entry) is equal to purePI[0] (first entry = 'basketball')
-    function renderCart(pureProductImages){
 
-    // using forEach removes the limitation forLoop had on iterating through the fixed length of pureProductImages
-    // now it simply tests the condition for all elements in the array regardless of length
-      pureProductImages.forEach((item) => {
-        for(let i = 0; i < cart.length; i++){
-          if(cart[i] === item.props.name){
-            cartItems.push(item);
-          }
-        }
-      })
-          
-    
 
-    
-      return (
-        <div>{cartItems}</div>
+  // set state for product quantity and implement increment/decrement handler functions
+
+  // copy of products : cannot mutate original arrays : pure programming
+  const pureProductDetails = [];
+
+  products.forEach((product) => {
+      pureProductDetails.push(
+        <ProductImage 
+          key={product.id} 
+          id={product.id}
+          image={product.image} 
+          name={product.name} 
+          colors={product.colors} 
+          cart={cart} 
+          setCart={setCart} 
+          cartQuantity={cartQuantity} 
+          setCartQuantity={setCartQuantity}
+          products={productQuantity}
+          setProductQuantity={setProductQuantity}
+          />
       )
-    }
-  
-    return (
-      <>
-        <Button onClick={onOpen}>View Cart</Button>
-        <Drawer placement='right' onClose={onClose} isOpen={isOpen}>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
-            <DrawerBody>
-              {renderCart(pureProductImages)}
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      </>
+  })
+
+  return (
+    <>
+      <Navbar cart={cart} pureProductDetails={pureProductDetails} cartQuantity={cartQuantity}/>
+      {pureProductDetails}
+    </>
+  )
+
+}
+
+
+
+  export default function ProductGallery({products}){
+    return(
+      <div className="container">
+        <div className="row">
+          <ProductDetails products={products}/>
+        </div>
+      </div>        
     )
-  }
-
-
-  // Modal Example
-
-  function ProductModal() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    return (
-      <>
-        <Button onClick={onOpen}>View Product</Button>
-  
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              hello
-            </ModalBody>
-  
-            <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
-                Close
-              </Button>
-              <Button variant='ghost'>Secondary Action</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    )
-  }
-
-
-
-  // Remove from Cart Drawer
-  // Product Modal Details
-  // Cart Drawer Quantity Option
-
-
-
+}
