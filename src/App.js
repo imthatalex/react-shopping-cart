@@ -2,6 +2,23 @@
 import './App.css';
 import {useState} from 'react';
 
+import {
+  Button,
+  Drawer,
+  DrawerOverlay,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton
+} from '@chakra-ui/react'
+
 
 
 export default function ProductGallery({products}){
@@ -38,10 +55,35 @@ function ProductImages({products}) {
 
   return (
     <>
+      <Navbar cart={cart} pureProductImages={pureProductImages} cartQuantity={cartQuantity}/>
       {pureProductImages}
     </>
   )
 
+}
+
+function Navbar({cartQuantity, cart, pureProductImages}){
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col">
+          <div>Home</div>
+        </div>
+        <div className="col">
+          <div></div>
+        </div>
+        <div className="col">
+          <div></div>
+        </div>
+        <div className="col">
+          <CartDrawer cart={cart} pureProductImages={pureProductImages}/>
+        </div>
+        <div className="col">
+          <div>Cart: {cartQuantity}</div>
+        </div>
+      </div>
+    </div> 
+  )
 }
 
 
@@ -60,7 +102,9 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
       cart.pop(name);
       setCart(cart);
       console.log(cart);
-      setCartQuantity(cartQuantity - 1);
+      if(cartQuantity !== 0){
+        setCartQuantity(cartQuantity - 1);
+      }
   }
 
   return(
@@ -82,10 +126,8 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
           <div className="col">
             <button onClick={removeFromCart}>Remove from Cart</button>  
           </div>
-        </div>
-        <div className="row">
           <div className="col">
-            {cartQuantity}
+            <ProductModal/>
           </div>
         </div>
       </div>
@@ -109,5 +151,66 @@ function ProductColors({colors}){
 
 
 
+  // Chakra Drawer
 
+  function CartDrawer({cart, pureProductImages}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const cartItems = [];
+
+    function renderCart(cart){
+      for(let i = 0; i < cart.length; i++){
+        cartItems.push(cart[i]);
+      }
+    
+      return (
+        <div>{cartItems}</div>
+      )
+    }
+  
+    return (
+      <>
+        <Button onClick={onOpen}>View Cart</Button>
+        <Drawer placement='right' onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+            <DrawerBody>
+              {renderCart(cart)}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      </>
+    )
+  }
+
+
+  // Modal Example
+
+  function ProductModal() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return (
+      <>
+        <Button onClick={onOpen}>View Product</Button>
+  
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              hello
+            </ModalBody>
+  
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant='ghost'>Secondary Action</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    )
+  }
 

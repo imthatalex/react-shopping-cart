@@ -1,3 +1,7 @@
+button {
+  border: 1px solid orange;
+}
+
 .container {
   border: 1px solid #000;
   margin: 40px auto;

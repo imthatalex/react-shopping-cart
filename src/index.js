@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import ProductGallery from './App';
 import reportWebVitals from './reportWebVitals';
+import { ChakraProvider } from '@chakra-ui/react'
 
 
 const productList = [
@@ -13,10 +14,13 @@ const productList = [
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <ProductGallery products={productList} />
-  </React.StrictMode>
+  <ChakraProvider>
+    <React.StrictMode>
+      <ProductGallery products={productList} />
+    </React.StrictMode>
+  </ChakraProvider>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
