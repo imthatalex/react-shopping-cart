@@ -9,9 +9,9 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 // add quantity
 const productList = [
-  {id: 0, name: 'Basketball', colors: ['orange', 'blue', 'black'], image: 'Basketball Image', quantity: 0},
-  {id: 1, name: 'Football', colors: ['orange', 'blue', 'black'], image: 'Football Image', quantity: 0},
-  {id: 2, name: 'Baseball', colors: ['orange', 'blue', 'black'], image: 'Baseball Image', quantity: 0},
+  {id: 0, name: 'Basketball', colors: ['orange', 'blue', 'black'], image: 'Basketball Image', quantity: 3},
+  {id: 1, name: 'Football', colors: ['orange', 'blue', 'black'], image: 'Football Image', quantity: 9},
+  {id: 2, name: 'Baseball', colors: ['orange', 'blue', 'black'], image: 'Baseball Image', quantity: 7},
 ]
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

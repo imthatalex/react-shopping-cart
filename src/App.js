@@ -18,6 +18,58 @@ import {
 } from '@chakra-ui/react'
 
 
+
+// created new product component : initial product component has unique state for button disabled, re renders when pushed to cart, resets state
+function ProductInCart({name, image, colors, quantity, products, setProducts}){
+
+
+  function incrementQuantity(){
+      let incrementedProducts = products.map(item => {
+        return {
+          ...item,
+          quantity: quantity + 1
+        }
+      })
+
+      setProducts(incrementedProducts);
+  }
+
+  function decrementQuantity(){
+    
+  }
+
+  return(
+    <>
+    <div className="col">
+      <div className="row">
+        {name}
+      </div>
+      <div className="row">
+        {image}
+      </div>
+      <div className="row">
+        {products.quantity}
+      </div>
+      <div className="row">
+        <ProductColors colors={colors}/>
+      </div>
+      <div className="row">
+        <div className="col">
+          <ProductModal/>
+        </div>
+        <div className="col">
+          <button onClick={incrementQuantity}>+1</button>
+        </div>
+        <div className="col">
+        <button onClick={decrementQuantity}>-1</button>
+        </div>
+      </div>
+    </div>
+  </>
+  )
+}
+
+
   // Cart Drawer 
 
   function CartDrawer({cart, pureProductDetails}) {
@@ -36,7 +88,17 @@ import {
       pureProductDetails.forEach((item) => {
         for(let i = 0; i < cart.length; i++){
           if(cart[i] === item.props.name){
-            productsInCart.push(item);
+            productsInCart.push(
+              <ProductInCart
+                key={item.props.id}
+                name={item.props.name}
+                image={item.props.image}
+                colors={item.props.colors}
+                quantity={item.props.quantity}
+                products={item.props.products}
+                setProducts={item.props.setProducts}
+              />
+            );
           }
         }
       })
@@ -138,33 +200,35 @@ function ProductColors({colors}){
 }
 
 
-function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCartQuantity}){
+function ProductDetail({image, name, colors, cart, setCart, cartQuantity, setCartQuantity}){
 
-
-
+  const [buttonDisabled, setButtonDisabled] = useState(false); 
 
   function addToCart(){
-    // update products quantity
+    // adds name of product to cart
     cart.push(name);
     setCart(cart);
+    // increments cart quantity
     setCartQuantity(cartQuantity + 1);
+    
+    for(let i = 0; i < cart.length; i++){
+      if(cart[i] === name) {
+        setButtonDisabled(true);
+      }
+    }
   }
 
   function removeFromCart(){
-  
-
-      // pop method : removing last element from array
+      // Limited : pop method : removes only last element from array
       
-    
-     
-      // filter is iterating through cart : its asking : if element value is not equal to name value, return value, since the value is equal it does not return 
+      // filter is iterating through cart : if element value is not equal to name value, return value, since the value is equal it does not return 
       setCart(cart.filter(element => element !== name));
-      
-
-    
+          
+      // ensures cart quantity does not drop into negative values : decrements cart quantity
       if(cartQuantity !== 0){
         setCartQuantity(cartQuantity - 1);
       }
+      setButtonDisabled(false);
   }
 
   return(
@@ -181,10 +245,10 @@ function ProductImage({image, name, colors, cart, setCart, cartQuantity, setCart
         </div>
         <div className="row">
           <div className="col">
-            <button onClick={addToCart}>Add to Cart</button>  
+            <button disabled={buttonDisabled} className="product-bttn" onClick={addToCart}>Add to Cart</button>  
           </div>
           <div className="col">
-            <button onClick={removeFromCart}>Remove from Cart</button>  
+            <button className="product-bttn" onClick={removeFromCart}>Remove from Cart</button>  
           </div>
           <div className="col">
             <ProductModal/>
@@ -204,11 +268,9 @@ function ProductDetails({products}) {
 
   // displays number of products in cart
   const [cartQuantity, setCartQuantity] = useState(0);
+
+  const [pureProducts, setPureProducts] = useState(products)
   
-
-  const [productQuantity, setProductQuantity] = useState(products);
-
-
 
   // set state for product quantity and implement increment/decrement handler functions
 
@@ -217,18 +279,19 @@ function ProductDetails({products}) {
 
   products.forEach((product) => {
       pureProductDetails.push(
-        <ProductImage 
+        <ProductDetail 
           key={product.id} 
           id={product.id}
           image={product.image} 
           name={product.name} 
           colors={product.colors} 
+          quantity={product.quantity}
+          products={pureProducts}
+          setProducts={setPureProducts}
           cart={cart} 
           setCart={setCart} 
           cartQuantity={cartQuantity} 
           setCartQuantity={setCartQuantity}
-          products={productQuantity}
-          setProductQuantity={setProductQuantity}
           />
       )
   })
