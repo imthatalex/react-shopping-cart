@@ -17,22 +17,26 @@ import {
   ModalCloseButton
 } from '@chakra-ui/react'
 
-
+// https://dpaste.org/HGeJr
 
 // created new product component : initial product component has unique state for button disabled, re renders when pushed to cart, resets state
-function ProductInCart({name, image, colors, quantity, products, setProducts}){
+function ProductInCart({name, image, colors, quantity, products}){
+
+  const [updateProducts, setUpdateProducts] = useState(products);
 
 
   function incrementQuantity(){
-      let incrementedProducts = products.map(item => {
-        return {
-          ...item,
-          quantity: quantity + 1
+    setUpdateProducts(updateProducts.map(p => {
+      return {
+        ...p,
+        props: {
+          quantity: p.quantity + 1
         }
-      })
-
-      setProducts(incrementedProducts);
+      }
+    }))
+    console.log(updateProducts);
   }
+
 
   function decrementQuantity(){
     
@@ -48,7 +52,7 @@ function ProductInCart({name, image, colors, quantity, products, setProducts}){
         {image}
       </div>
       <div className="row">
-        {products.quantity}
+        {quantity}
       </div>
       <div className="row">
         <ProductColors colors={colors}/>
@@ -85,7 +89,7 @@ function ProductInCart({name, image, colors, quantity, products, setProducts}){
     // using forEach removes the limitation forLoop had on iterating through the fixed length of pureProductDetails
     // now it simply tests the condition for all elements in the array regardless of length
 
-      pureProductDetails.forEach((item) => {
+      pureProductDetails.map((item) => {
         for(let i = 0; i < cart.length; i++){
           if(cart[i] === item.props.name){
             productsInCart.push(
@@ -93,10 +97,9 @@ function ProductInCart({name, image, colors, quantity, products, setProducts}){
                 key={item.props.id}
                 name={item.props.name}
                 image={item.props.image}
-                colors={item.props.colors}
                 quantity={item.props.quantity}
-                products={item.props.products}
-                setProducts={item.props.setProducts}
+                colors={item.props.colors}
+                products={productsInCart}
               />
             );
           }
@@ -269,13 +272,15 @@ function ProductDetails({products}) {
   // displays number of products in cart
   const [cartQuantity, setCartQuantity] = useState(0);
 
-  const [pureProducts, setPureProducts] = useState(products)
+  
   
 
   // set state for product quantity and implement increment/decrement handler functions
 
   // copy of products : cannot mutate original arrays : pure programming
   const pureProductDetails = [];
+
+  const [pureProducts, setPureProducts] = useState(pureProductDetails);
 
   products.forEach((product) => {
       pureProductDetails.push(
