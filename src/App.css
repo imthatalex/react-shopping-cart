@@ -21,7 +21,8 @@
 
 
 .product {
-  background-color: #E8EEF4;
+  background-color: #fff;
+  border: 1px solid #888888;
   margin: 30px 10px 10px 10px;
   border-radius: 5px;
   box-shadow: 5px 5px #888888;
