@@ -46,25 +46,27 @@ function ProductInCart({name, image, colors}){
 
   return(
     <>
-    <div className="col">
-      <div className="row">
-        {name}
-      </div>
-      <div className="row">
-        {image}
-      </div>
-      <div className="row">
-        {productQuantity}
-      </div>
-      <div className="row">
-        <ProductColors colors={colors}/>
-      </div>
-      <div className="row">
-        <div className="col">
-          <button className="product-bttn" onClick={incrementQuantity}>+1</button>
+    <div classsName="container">
+      <div className="col">
+        <div className="row">
+          {name}
         </div>
-        <div className="col">
-        <button className="product-bttn" onClick={decrementQuantity}>-1</button>
+        <div className="row">
+          <img alt={name} src={image}/>
+        </div>
+        <div className="row">
+          {productQuantity}
+        </div>
+        <div className="row">
+          <ProductColors colors={colors}/>
+        </div>
+        <div className="row">
+          <div className="col">
+            <button className="product-bttn" onClick={incrementQuantity}>+1</button>
+          </div>
+          <div className="col">
+          <button className="product-bttn" onClick={decrementQuantity}>-1</button>
+          </div>
         </div>
       </div>
     </div>
@@ -104,7 +106,7 @@ function ProductInCart({name, image, colors}){
 
     return (
       <>
-      <div id="mySidenav" style={{width: toggleMenu ? '250px' : '0'}} className="sidenav">
+      <div id="mySidenav" style={{width: toggleMenu ? '350px' : '0'}} className="sidenav">
         <button className="closebtn" onClick={closeNav}>Close</button>
         {productsInCart}
       </div>
@@ -167,7 +169,7 @@ function ProductInCart({name, image, colors}){
 function Navbar({cart, pureProductDetails, cartQuantity}){
   return (
     <div className="container">
-      <div className="row">
+      <div id="navbar" className="row">
         <div className="col">
           <div>Home</div>
         </div>
@@ -220,7 +222,7 @@ function ProductModal({name, image, colors}) {
           <ModalBody>
           <div className="col">
             <div className="row">
-              {image}
+              <img alt={name} src={image}/>
             </div>
             <div className="row">
               <ProductColors colors={colors}/>
@@ -243,7 +245,8 @@ function ProductModal({name, image, colors}) {
 function ProductDetail({image, name, colors, cart, setCart, cartQuantity, setCartQuantity}){
 
   // state used to disable add to cart func once product is added to cart to eliminate duplications
-  const [buttonDisabled, setButtonDisabled] = useState(false); 
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false); 
+  const [removeButtonDisabled, setRemoveButtonDisabled] = useState(true);
 
   function addToCart(){
     cart.push(name);
@@ -252,7 +255,8 @@ function ProductDetail({image, name, colors, cart, setCart, cartQuantity, setCar
     
     for(let i = 0; i < cart.length; i++){
       if(cart[i] === name) {
-        setButtonDisabled(true);
+        setAddButtonDisabled(true);
+        setRemoveButtonDisabled(false);
       }
     }
   }
@@ -266,29 +270,30 @@ function ProductDetail({image, name, colors, cart, setCart, cartQuantity, setCar
         setCartQuantity(cartQuantity - 1);
       }
       // reactivates add to cart button once product is removed from cart
-      setButtonDisabled(false);
+      setAddButtonDisabled(false);
+      setRemoveButtonDisabled(true);
   }
 
   return(
     <>
-      <div className="col">
+      <div className="col product">
         <div className="row">
           {name}
         </div>
         <div className="row">
-          {image}
+          <img alt={name} src={image}/>
         </div>
         <div className="row">
           <ProductColors colors={colors}/>
         </div>
         <div className="row">
-          <div className="col">
-            <button disabled={buttonDisabled} className="product-bttn" onClick={addToCart}>Add to Cart</button>  
+          <div className="col-lg-3">
+            <button disabled={addButtonDisabled} className="product-bttn" onClick={addToCart}>Add</button>  
           </div>
-          <div className="col">
-            <button className="product-bttn" onClick={removeFromCart}>Remove from Cart</button>  
+          <div className="col-lg-4">
+            <button disabled={removeButtonDisabled} className="product-bttn" onClick={removeFromCart}>Remove</button>  
           </div>
-          <div className="col">
+          <div className="col-lg-4">
             <ProductModal
               name={name}
               image={image}

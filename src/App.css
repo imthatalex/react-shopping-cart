@@ -1,21 +1,30 @@
-#testingId {
-  color: red;
+.container {
+  background-color: #fff;
+  max-width: 100%;
 }
 
-
-.container {
-  border: 1px solid #000;
-  margin: 40px auto;
+#navbar {
+  padding: 0;
+  margin: -20px 0 auto 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .row {
-  border: 1px solid red;
-  padding: 30px;
+  padding: 20px;
 }
 
 .col {
-  border: 1px solid blue;
   padding: 20px;
+}
+
+
+.product {
+  background-color: #E8EEF4;
+  margin: 30px 10px 10px 10px;
+  border-radius: 5px;
+  box-shadow: 5px 5px #888888;
 }
 
 .color-example {
@@ -28,11 +37,14 @@
 }
 
 .product-bttn {
-  background-color: orange;
+  background-color: #E8EEF4;
   border: none;
-  border-radius: 12.5em;
-  padding: 10px 15px;
+  border-radius: 5px;
+  padding: 8px 15px;
   margin: auto;
+  font-weight: 600;
+  font-size: 1em;
+  box-shadow: 5px 5px #888888;
 }
 
 .product-bttn:hover {
