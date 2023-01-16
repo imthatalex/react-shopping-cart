@@ -11,4 +11,14 @@ This repository contains a simple shopping cart component built using React. The
 - Basic understanding of React and JSX
 
 ### Usage
-- Clone or Download the Repo.
+1. Clone or Download the Repo.
+2. In your Index.js file, Copy & Update the Product List to use your Products.
+```javascript
+const productList = [
+  { id: 0, name: 'Cap', colors: ['orange', 'blue', 'black'], image: 'balenciaga-c.jpeg' },
+  { id: 1, name: 'Hoodie', colors: ['orange', 'blue', 'black'], image: 'balenciaga-h.jpeg' },
+  { id: 2, name: 'T-Shirt', colors: ['orange', 'blue', 'black'], image: 'balenciaga-t.jpeg' },
+]
+```
+3. Copy the Shopping Cart Component & Import It
+
