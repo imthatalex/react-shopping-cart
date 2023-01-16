@@ -1,5 +1,5 @@
 # React Shopping Cart Component
-This repository contains a simple shopping cart component built using React. The component demonstrates how React handles state and how state can be passed down from parent components to child components.
+This repository contains a simple shopping cart component built using React & Chakra. The component demonstrates how React handles state and how state can be passed down from parent components to child components.
 
 ### Features
 - Add items to the cart
@@ -12,7 +12,7 @@ This repository contains a simple shopping cart component built using React. The
 
 ### Usage
 1. Clone or Download the Repo.
-2. In your Index.js file, Copy & Update the Product List to use your Products.
+2. In your Index.js file, Insert & Update the Product List to use your Products.
 ```javascript
 const productList = [
   { id: 0, name: 'Cap', colors: ['orange', 'blue', 'black'], image: 'balenciaga-c.jpeg' },
@@ -20,5 +20,7 @@ const productList = [
   { id: 2, name: 'T-Shirt', colors: ['orange', 'blue', 'black'], image: 'balenciaga-t.jpeg' },
 ]
 ```
-3. Copy the Shopping Cart Component & Import It
+3. Import the CSS Stylings. 
+4. Import the Shopping Cart Component.
+
 
