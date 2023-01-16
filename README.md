@@ -23,4 +23,5 @@ const productList = [
 3. Import the CSS Stylings. 
 4. Import the Shopping Cart Component.
 
-
+### Note
+This component is intended to demonstrate the basic usage of React state and is not meant to be used in a production environment. There is no backend integration and no handling of any data persistence.
