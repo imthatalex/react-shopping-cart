@@ -11,3 +11,4 @@ What I Learned :
 - Creating Unmutated (Pure) Arrays
 - Use Conditional Rendering to Control Display of Components
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e35bbbca-8621-4911-b840-55f67639b594/deploy-status)](https://app.netlify.com/sites/imthatalex-shopping-cart/deploys)
