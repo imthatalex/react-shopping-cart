@@ -8,9 +8,7 @@ function ProductInCart({ name, image, colors }) {
   const [productQuantity, setProductQuantity] = useState(1);
 
 
-  // Using arrow expression to ensure the current value ~ S.R
-
-  // Issue #001 : Charkra Drawer Component : onClose : Resets Product Quantity State
+  // Using arrow expression to ensure the current value
   function incrementQuantity() {
     setProductQuantity(productQuantity => productQuantity + 1);
   }
@@ -109,9 +107,6 @@ function Navbar({ cart, pureProductDetails, cartQuantity }) {
     <div className="container">
       <div id="navbar" className="row">
         <div className="col">
-          <div>Home</div>
-        </div>
-        <div className="col">
           <SideMenu cart={cart} pureProductDetails={pureProductDetails} />
         </div>
         <div className="col">
@@ -189,7 +184,7 @@ function ProductDetail({ image, name, colors, cart, setCart, cartQuantity, setCa
         <div className="row">
           <ProductColors colors={colors} />
         </div>
-        <div className="row">
+        <div id="buttonRow" className="row">
           <div className="col-lg-3">
             <button disabled={addButtonDisabled} className="product-bttn" onClick={addToCart}>Add</button>
           </div>
@@ -201,8 +196,6 @@ function ProductDetail({ image, name, colors, cart, setCart, cartQuantity, setCa
     </>
   )
 }
-
-
 
 
 function ProductDetails({ products }) {
@@ -243,7 +236,7 @@ function ProductDetails({ products }) {
 export default function ProductList({ products }) {
   return (
     <div className="container">
-      <div className="row">
+      <div id="productDetails" className="row">
         <ProductDetails products={products} />
       </div>
     </div>
